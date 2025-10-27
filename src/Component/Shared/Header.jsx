@@ -1,10 +1,14 @@
+// src/Component/Shared/Header.jsx (CÓDIGO COMPLETO Y FINAL)
+
 import React from 'react';
+// Asegúrate de que useCartStorage es el nombre correcto
 import { useCartStorage } from '../../context/CartContext'; 
 // Asegúrate que esta ruta sea correcta:
 import corazonesFondo from '../../../public/imagen/corazon2.jpg'; 
 import ThemeButton from './ThemeButton';
 
-export default function Header() {
+// 🚨 CLAVE: Recibir la prop onCartClick para manejar la apertura del carrito
+export default function Header({ onCartClick }) {
     // Lógica para el contador del carrito
     const { cart } = useCartStorage();
     const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
@@ -47,7 +51,7 @@ export default function Header() {
                             // Título Grande (6xl), Grueso (extrabold) y Rosa Suave (pink-500)
                             className="text-6xl font-extrabold text-pink-500 drop-shadow-lg"
                         >
-                                   Mi Lucero 
+                                        Mi Lucero 
                         </h1>
                     </div>
 
@@ -57,18 +61,23 @@ export default function Header() {
                         <button className="text-xl hover:text-pink-500 transition" title="Mi Cuenta">👤</button>
                         {/* 🌗 BOTÓN DE TEMA */}
                         <ThemeButton />
-                        {/* ÍCONO DE CARRITO */}
-                        <button className="relative text-xl hover:text-pink-500 transition" title="Carrito">
+                        
+                        {/* ÍCONO DE CARRITO: AÑADIMOS EL onClick */}
+                        <button 
+                            className="relative text-xl hover:text-pink-500 transition" 
+                            title="Carrito"
+                            // 🚨 CAMBIO CLAVE: Usa la función para abrir el modal del carrito
+                            onClick={onCartClick}
+                        >
                             🛒
                             {itemCount > 0 && (
                                 <span className="absolute top-[-10px] right-[-10px] bg-red-600 text-white 
-                                                 rounded-full w-5 h-5 flex items-center justify-center 
-                                                 text-xs font-bold ring-2 ring-white">
+                                                rounded-full w-5 h-5 flex items-center justify-center 
+                                                text-xs font-bold ring-2 ring-white">
                                     {itemCount}
                                 </span>
                             )}
                         </button>
-                        
                     </div>
                 </div>
             </div>

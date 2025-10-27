@@ -15,12 +15,12 @@ export default function ProductList() {
             
             
             
-            <div className="grid grid-cols-3 gap-6"> 
+           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {products.map((product) => (
                     <div
                        key={product.id}
     //  CAMBIO CLAVE: Usa dark:bg-card-bg-dark que ahora es #880e4f
-    className="bg-white dark:bg-card-bg-dark rounded-lg shadow-lg hover:shadow-xl transition duration-300 flex flex-col items-center justify-between p-4 border border-gray-100 dark:border-gray-700"
+        className="bg-white dark:bg-card-bg-dark rounded-lg shadow-lg hover:shadow-xl transition duration-300 flex flex-col items-center justify-between p-4 border border-gray-100 dark:border-gray-700"
 >
                         {/* Contenido de la tarjeta */}
                         <div className="w-full h-64 flex items-center justify-center p-4 overflow-hidden">
