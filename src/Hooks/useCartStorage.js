@@ -2,11 +2,10 @@
 
 import { useState, useEffect, useMemo } from "react";
 
-// Nota: No necesitas el CartContext.jsx si usas este hook directamente
-// en los componentes que lo necesitan (pero Home.jsx no lo usa).
-// Si usas un CartContext para envolver la app, adapta este código a tu contexto.
-
-export default function useCartStorage(key = "shoppingCart", initialValue = []) {
+export default function useCartStorage(
+  key = "shoppingCart",
+  initialValue = []
+) {
   const [items, setItems] = useState(() => {
     try {
       const stored = localStorage.getItem(key);
@@ -18,12 +17,14 @@ export default function useCartStorage(key = "shoppingCart", initialValue = []) 
     }
   });
 
+  // 💾 Guarda los cambios del carrito en localStorage
   useEffect(() => {
     localStorage.setItem(key, JSON.stringify(items));
   }, [key, items]);
 
-  // ---------- API del Carrito ----------
+  // ------------------ 🛒 Lógica del Carrito ------------------
 
+  // ➕ Agregar producto al carrito
   const addToCart = (product) => {
     setItems((prevItems) => {
       const existing = prevItems.find((p) => p.id === product.id);
@@ -37,27 +38,27 @@ export default function useCartStorage(key = "shoppingCart", initialValue = []) 
     });
   };
 
+  // ❌ Eliminar producto por ID
   const removeFromCart = (id) =>
     setItems((prev) => prev.filter((p) => p.id !== id));
 
-  // Nuevo: Incrementa la cantidad por 1
+  // 🔼 Incrementar cantidad
   const increaseQuantity = (id) => {
     setItems((prev) =>
       prev.map((p) => (p.id === id ? { ...p, quantity: p.quantity + 1 } : p))
     );
   };
 
-  //  Nuevo: Decrementa la cantidad por 1, eliminando si llega a 0
+  // 🔽 Decrementar cantidad (elimina si llega a 0)
   const decreaseQuantity = (id) => {
-    setItems(
-      (prev) =>
-        prev
-          .map((p) => (p.id === id ? { ...p, quantity: p.quantity - 1 } : p))
-          .filter((p) => p.quantity > 0) // Filtra el item si la cantidad es 0
+    setItems((prev) =>
+      prev
+        .map((p) => (p.id === id ? { ...p, quantity: p.quantity - 1 } : p))
+        .filter((p) => p.quantity > 0)
     );
   };
 
-  // (Mantengo tu función original, aunque ya no es necesaria en CartProduct.jsx)
+  // 🔢 Actualizar cantidad manualmente
   const updateQuantity = (id, newQuantity) => {
     setItems((prev) => {
       const q = Math.max(0, Number(newQuantity) || 0);
@@ -68,7 +69,7 @@ export default function useCartStorage(key = "shoppingCart", initialValue = []) 
     });
   };
 
-  // Cálculo del Precio Total
+  // 💰 Calcular total general
   const totalPrice = useMemo(() => {
     if (!Array.isArray(items)) return 0;
     return items.reduce(
@@ -77,22 +78,23 @@ export default function useCartStorage(key = "shoppingCart", initialValue = []) 
     );
   }, [items]);
 
-  // Total de items para el contador
+  // 🧮 Total de ítems
   const totalItems = useMemo(() => {
     if (!Array.isArray(items)) return 0;
     return items.reduce((sum, it) => sum + (Number(it.quantity) || 0), 0);
   }, [items]);
 
-  // Objeto de Retorno
+  // ------------------ 🚀 Retorno del Hook ------------------
   return {
     cart: items,
-    addToCart,
+    addItemToCart: addToCart, // ✅ alias compatible con tus componentes
+    addToCart, // también lo dejamos por si lo usás directo
     removeFromCart,
     updateQuantity,
-    increaseQuantity, // <-- Función esencial para el botón '+'
-    decreaseQuantity, // <-- Función esencial para el botón '−'
+    increaseQuantity,
+    decreaseQuantity,
     clearCart: () => setItems([]),
-    totalAmount: totalPrice, // Renombrada para coincidir con tu contexto
+    totalAmount: totalPrice,
     totalItems,
   };
 }

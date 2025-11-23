@@ -22,6 +22,12 @@ export function ThemeProvider({ children }) {
   );
 }
 
-export function useTheme() {
+export function useTheme () {
   return useContext(ThemeContext);
 }
+
+
+//hook integr
+
+//El error en el editor es solo una advertencia de Fast Refresh, que prefiere que los hooks y providers estén en archivos separados, pero la funcionalidad es 100% correcta."
+//que cualquier componente que necesite saber el estado del tema o cambiarlo (como App.jsx o el Header)

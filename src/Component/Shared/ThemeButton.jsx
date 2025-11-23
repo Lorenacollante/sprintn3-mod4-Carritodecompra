@@ -14,7 +14,7 @@ export default function ThemeButton() {
       aria-label="Toggle theme"
     >
       <span className="text-xl">
-        {darkMode ? '☀️' : '🌙'}
+        {darkMode ? '🌕' : '🌤'}
       </span>
     </button>
   );
